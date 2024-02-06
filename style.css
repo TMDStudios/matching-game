@@ -8,7 +8,10 @@ body {
     width: 1080px;
     height: 720px;
     margin: auto;
-    /* border: 1px solid white; */
+    /* Disable text selection */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
 }
 h3 {
     text-align: center;
@@ -25,23 +28,62 @@ h3 {
     width: 100%;
     justify-content: center;
 }
-.row div {
+.card {
     font-size: 4em;
     margin: 8px;
     border: 1px solid blue;
+    border-radius: 8px;
     width: 150px;
     height: 150px;
     text-align: center;
     vertical-align: middle;
     line-height: 150px;
-    background-color: green;
-    border-radius: 8px;
-    /* perspective: 1000px; */
+    background-color: transparent;
+    perspective: 1000px;
 }
-/* .row div:hover {
-    transform: rotateY(180deg);
-    background-color: darkgreen;
-    cursor: pointer;
+.cardInner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
-} */
+}
+.card:hover .cardInner {
+    /* transform: rotateY(180deg); */
+    cursor: pointer;
+}
+.cardFront, .cardBack {
+    border-radius: 8px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+.cardFrontFlipped, .cardBackFlipped {
+    border-radius: 8px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
+.cardFront {
+    background-color: snow;
+    color: rgba(0,0,0,.5);
+    transform: rotateY(0deg);
+}
+.cardFrontFlipped {
+    transform: rotateY(180deg);
+}
+.cardBack {
+    background-color: darkblue;
+    color: white;
+    transform: rotateY(180deg);
+}
+.cardBackFlipped {
+    transform: rotateY(0deg);
+}
