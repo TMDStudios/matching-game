@@ -2,6 +2,19 @@ const fruits = ["🍎", "🍊", "🍌", "🍉", "🍇", "🍓", "🍒", "🥝","
 const food = ["🍞", "🧀", "🥨", "🥗", "🍔", "🍕", "🥪", "🌮"];
 
 const selected = {"a": "", "b": ""}; // Keep track of selected cards
+let selectedCard = "";
+let cardToFlip = "";
+let pairsFound = 0;
+
+// TODO
+// only allow 2 cards to be flipped at a time
+// add congratulations animation
+// allow user to reset game after the game is done
+// more categories
+// each new game should use random category
+// allow for category selection
+// add images
+// allow image uploads for custom games
 
 const randomizeBoard = (images) => {
     for(let i=0; i<images.length; i++){
@@ -23,8 +36,6 @@ const setCardStyle = (cardId, flip) => {
         card.style.backfaceVisibility = 'hidden';
         card.style.transition = 'transform 0.8s';
         card.style.transformStyle = 'preserve-3d';
-        card.style.backgroundColor = 'snow';
-        card.style.color = 'rgba(0,0,0,.5)';
     }else{
         card.style.borderRadius = '8px';
         card.style.position = 'absolute';
@@ -36,7 +47,10 @@ const setCardStyle = (cardId, flip) => {
     }
 };
 
-const flipCard = (cardId) => {
+const flipCard = (cardId, flipBack=false) => {
+    if(pairsFound>=8){
+        return;
+    }
     var cardFront = document.getElementById("front"+cardId);
     var cardBack = document.getElementById("back"+cardId);
     cardFront.classList.toggle('cardFront');
@@ -51,6 +65,8 @@ const flipCard = (cardId) => {
         setCardStyle(cardFront.id, false);
         cardFront.style.transform = 'rotateY(180deg)';
     }
+    cardFront.style.backgroundColor = 'snow';
+    cardFront.style.color = 'rgba(0,0,0,.5)';
 
     if (cardBack.classList.contains('cardBack')) {
         setCardStyle(cardBack.id, false);
@@ -58,6 +74,32 @@ const flipCard = (cardId) => {
     } else {
         setCardStyle(cardBack.id, true);
         cardBack.style.transform = 'rotateY(0deg)';
+    }
+    cardBack.style.backgroundColor = 'darkblue';
+
+    if(!flipBack){
+        if(selectedCard.length>0){
+            // console.log(`TESTING cardId=${cardId}, selectedCard=${selectedCard}, cardToFlip=${cardToFlip}`)
+            if(document.getElementById("back"+cardId).innerHTML==document.getElementById("back"+selectedCard).innerHTML){
+                selectedCard="";
+                pairsFound++;
+                setTimeout(() => {
+                    if(pairsFound>=8){
+                        alert("You did it!");
+                    }
+                }, 1000);
+            }else{
+                cardToFlip=selectedCard;
+                selectedCard="";
+                pause = true;
+                setTimeout(() => {
+                    flipCard(cardId, true);
+                    flipCard(cardToFlip, true);
+                }, 1000);
+            }
+        }else{
+            selectedCard=cardId;
+        }
     }
 };
 
