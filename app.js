@@ -137,6 +137,14 @@ const populateBoard = () => {
     }
     // console.log(codeBlock)
     document.getElementById("activity").innerHTML = codeBlock;
+
+    const cardHeight = window.getComputedStyle(document.getElementById("innera0"), null).getPropertyValue("height");
+    
+    const allCards = document.querySelectorAll('.card');
+
+    allCards.forEach(element => {
+        element.style.lineHeight = `${cardHeight}`;
+    });
 };
 
 populateBoard();
