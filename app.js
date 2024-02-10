@@ -1,16 +1,19 @@
 const fruits = ["🍎", "🍊", "🍌", "🍉", "🍇", "🍓", "🍒", "🥝","🍎", "🍊", "🍌", "🍉", "🍇", "🍓", "🍒", "🥝"];
-const food = ["🍞", "🧀", "🥨", "🥗", "🍔", "🍕", "🥪", "🌮"];
+const food = ["🍞", "🧀", "🥨", "🥗", "🍔", "🍕", "🥪", "🌮", "🍞", "🧀", "🥨", "🥗", "🍔", "🍕", "🥪", "🌮"];
+const emotions = ["🙂", "🙁", "🤪", "😳", "😠", "😥", "🫣", "🤨", "🙂", "🙁", "🤪", "😳", "😠", "😥", "🫣", "🤨"];
+const clothes = ["👕", "👖", "🧣", "🧤", "🧦", "👗", "👟", "👒", "👕", "👖", "🧣", "🧤", "🧦", "👗", "👟", "👒"];
+const sports = ["⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏓", "🏒", "⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏓", "🏒"];
+
+const categories = [fruits, food, emotions, clothes, sports]
 
 const selected = {"a": "", "b": ""}; // Keep track of selected cards
 let pairsFound = 0;
+const category = categories[Math.floor(Math.random()*categories.length)];
 
 // TODO
 
-// only allow 2 cards to be flipped at a time
 // add congratulations animation
-// allow user to reset game after the game is done
 // more categories
-// each new game should use random category
 // allow for category selection
 // add images
 // allow image uploads for custom games
@@ -86,7 +89,9 @@ const flipCard = (cardId, flipBack=false) => {
                 pairsFound++;
                 setTimeout(() => {
                     if(pairsFound>=8){
-                        alert("You did it!");
+                        if(confirm("You did it!\nPlay again?")){
+                            window.location.replace("/");
+                        }
                     }
                 }, 1000);
             }else{
@@ -113,7 +118,7 @@ const handleClick = cardId => {
 }
 
 const populateBoard = () => {
-    const images = randomizeBoard(fruits);
+    const images = randomizeBoard(category);
     let imageCount = 0;
     const rows = ["a", "b", "c", "d"];
     let codeBlock = "";
