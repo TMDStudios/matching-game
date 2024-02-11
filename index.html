@@ -8,13 +8,16 @@
 </head>
 <body>
     <div class="head">
-        <div id="title">
-            <h3>Find all doubles</h3>
-        </div>
+        <p>Settings</p>
+        <h3 id="title">Find all doubles</h3>
+        <p onclick="showModal(true)">Help</p>
     </div>
     <div class="body">
         <div id="activity"></div>
     </div>
+    <dialog class="modal" id="modal">
+        <div id="modal_content"></div>
+    </dialog>
     <script type="text/javascript" src="app.js"></script>
 </body>
 </html>

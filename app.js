@@ -19,6 +19,24 @@ const category = categories[Math.floor(Math.random()*categories.length)];
 // allow image uploads for custom games
 // replace timeouts with async?
 
+const showModal = (gameOver=false) => {
+    if(gameOver){
+        document.getElementById("title").innerHTML=`<a href="https://match.up.railway.app/">Play Again</a>`;
+
+        document.getElementById("modal_content").innerHTML = `
+        <h2><b>You did it!</b></h2>
+        <div><button id="modal_button">Play Again</button></div>
+        `;
+
+        document.getElementById("modal_button").addEventListener('click', () => {
+            document.getElementById("modal").close();
+            window.location.replace("/");
+        });
+
+        document.getElementById("modal").showModal();
+    }
+}
+
 const randomizeBoard = (images) => {
     for(let i=0; i<images.length; i++){
         const j = Math.floor(Math.random() * images.length);
@@ -89,9 +107,7 @@ const flipCard = (cardId, flipBack=false) => {
                 pairsFound++;
                 setTimeout(() => {
                     if(pairsFound>=8){
-                        if(confirm("You did it!\nPlay again?")){
-                            window.location.replace("/");
-                        }
+                        showModal(true);
                     }
                 }, 1000);
             }else{
@@ -109,7 +125,8 @@ const flipCard = (cardId, flipBack=false) => {
 };
 
 const handleClick = cardId => {
-    if(selected['a'].length>0 && selected['b'].length>0){
+    if((selected['a'].length>0 && selected['b'].length>0) || (selected['a'] == cardId && cardId.length>0)){
+        // console.log(`RETURNING cardId=${cardId}, selectedA=${selected['a']}, selectedB=${selected['b']}`)
         return;
     }
     // console.log(`TESTING cardId=${cardId}, selectedA=${selected['a']}, selectedB=${selected['b']}`)
@@ -139,7 +156,6 @@ const populateBoard = () => {
     document.getElementById("activity").innerHTML = codeBlock;
 
     const cardHeight = window.getComputedStyle(document.getElementById("innera0"), null).getPropertyValue("height");
-    
     const allCards = document.querySelectorAll('.card');
 
     allCards.forEach(element => {
