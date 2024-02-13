@@ -4,33 +4,67 @@ const emotions = ["🙂", "🙁", "🤪", "😳", "😠", "😥", "🫣", "🤨"
 const clothes = ["👕", "👖", "🧣", "🧤", "🧦", "👗", "👟", "👒", "👕", "👖", "🧣", "🧤", "🧦", "👗", "👟", "👒"];
 const sports = ["⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏓", "🏒", "⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏓", "🏒"];
 
-const categories = [fruits, food, emotions, clothes, sports]
+const categories = [fruits, food, emotions, clothes, sports];
+const categoryMap = {"fruits":fruits, "food":food, "emotions":emotions, "clothes":clothes, "sports":sports};
 
 const selected = {"a": "", "b": ""}; // Keep track of selected cards
 let pairsFound = 0;
-const category = categories[Math.floor(Math.random()*categories.length)];
+let category = categories[Math.floor(Math.random()*categories.length)];
 
 // TODO
 
 // add congratulations animation
 // more categories
-// allow for category selection
 // add images
 // allow image uploads for custom games
 // replace timeouts with async?
 
-const showModal = (gameOver=false) => {
+const resetBoard = newCategory => {
+    category = categoryMap[newCategory];
+    console.log(`Category set to ${newCategory}`)
+    pairsFound = 0;
+    selected['a']="";
+    selected['b']="";
+    populateBoard();
+    document.getElementById("modal").close();
+}
+
+const showModal = (gameOver=false, setCategory=false) => {
     if(gameOver){
+        document.getElementById("modal").style.width = "33vw";
+        document.getElementById("modal").style.maxHeight = "33vw";
         document.getElementById("title").innerHTML=`<a href="https://match.up.railway.app/">Play Again</a>`;
 
         document.getElementById("modal_content").innerHTML = `
-        <h2><b>You did it!</b></h2>
+        <h2>You did it!</h2>
         <div><button id="modal_button">Play Again</button></div>
         `;
 
         document.getElementById("modal_button").addEventListener('click', () => {
             document.getElementById("modal").close();
             window.location.replace("/");
+        });
+
+        document.getElementById("modal").showModal();
+    }
+    if(setCategory){
+        document.getElementById("modal").style.width = "60vw";
+        document.getElementById("modal").style.maxHeight = "60vh";
+
+        document.getElementById("modal_content").innerHTML = `
+            <div><h3>Choose a category</h3></div>
+            <div id="selectCategory">
+                <div onclick="resetBoard('fruits')">Fruits</div>
+                <div onclick="resetBoard('food')">Food</div>
+                <div onclick="resetBoard('emotions')">Emotions</div>
+                <div onclick="resetBoard('clothes')">Clothes</div>
+                <div onclick="resetBoard('sports')">Sports</div>
+            </div>
+            <div><button id="modal_button">Close</button></div>
+        `
+
+        document.getElementById("modal_button").addEventListener('click', () => {
+            document.getElementById("modal").close();
         });
 
         document.getElementById("modal").showModal();
@@ -126,10 +160,8 @@ const flipCard = (cardId, flipBack=false) => {
 
 const handleClick = cardId => {
     if((selected['a'].length>0 && selected['b'].length>0) || (selected['a'] == cardId && cardId.length>0)){
-        // console.log(`RETURNING cardId=${cardId}, selectedA=${selected['a']}, selectedB=${selected['b']}`)
         return;
     }
-    // console.log(`TESTING cardId=${cardId}, selectedA=${selected['a']}, selectedB=${selected['b']}`)
     selected['a']=="" ? selected['a']=cardId : selected['b']=cardId;
     flipCard(cardId);
 }
@@ -152,7 +184,6 @@ const populateBoard = () => {
         };
         codeBlock+=`</div>`;
     }
-    // console.log(codeBlock)
     document.getElementById("activity").innerHTML = codeBlock;
 
     const cardHeight = window.getComputedStyle(document.getElementById("innera0"), null).getPropertyValue("height");

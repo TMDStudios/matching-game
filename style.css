@@ -24,6 +24,14 @@ h2 {
     line-height: 8vh;
     vertical-align: middle;
 }
+#title a {
+    text-decoration: none;
+    color: white;
+}
+#title a:hover {
+    text-decoration: underline;
+    color: lightblue;
+}
 #activity {
     background-color: rgba(255,255,255,0.1);
     display: flex;
@@ -102,8 +110,8 @@ h2 {
     border: 2px solid black;
     border-radius: 4px;
     margin: auto;
-    width: 20vh;
-    height: 20vh;
+    width: 33vw;
+    max-height: 33vw;
     text-align: center;
     line-height: 8vh;
 }
@@ -120,11 +128,37 @@ h2 {
     padding: 4px;
     border-radius: 4px;
     margin: 4px;
+    width: 80%;
+    align-items: center;
 }
 .modal button:hover {
     background-color: #172035;
     color: white;
     cursor: pointer;
+}
+#selectCategory {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#selectCategory div {
+    border: 2px solid #243763;
+    color: #243763;
+    border-radius: 4px;
+    line-height: 36px;
+    vertical-align: center;
+    background-color: rgba(0,0,0,0.1);
+    width: 80%;
+    margin: 8px;
+}
+#selectCategory div:hover {
+    cursor: pointer;
+    background-color: lightblue;
+}
+#selectCategory button {
+    width: 80%;
+    margin: 8px;
 }
 
 @media all and (max-width: 600px) {
