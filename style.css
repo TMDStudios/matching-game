@@ -104,6 +104,9 @@ h2 {
 .cardBackFlipped {
     transform: rotateY(0deg);
 }
+.card img {
+    width: 100%;
+}
 
 /* MODAL */
 .modal {

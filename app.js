@@ -4,24 +4,28 @@ const emotions = ["🙂", "🙁", "🤪", "😳", "😠", "😥", "🫣", "🤨"
 const clothes = ["👕", "👖", "🧣", "🧤", "🧦", "👗", "👟", "👒", "👕", "👖", "🧣", "🧤", "🧦", "👗", "👟", "👒"];
 const sports = ["⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏓", "🏒", "⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏓", "🏒"];
 
+const pictures = ["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8"];
+
 const categories = [fruits, food, emotions, clothes, sports];
-const categoryMap = {"fruits":fruits, "food":food, "emotions":emotions, "clothes":clothes, "sports":sports};
+const categoryMap = {"fruits":fruits, "food":food, "emotions":emotions, "clothes":clothes, "sports":sports, "pictures":pictures};
 
 const selected = {"a": "", "b": ""}; // Keep track of selected cards
 let pairsFound = 0;
 let category = categories[Math.floor(Math.random()*categories.length)];
+let usePictures = false;
 
 // TODO
 
 // add congratulations animation
 // more categories
-// add images
 // allow image uploads for custom games
 // replace timeouts with async?
+// have a numbers category
 
 const resetBoard = newCategory => {
     category = categoryMap[newCategory];
-    console.log(`Category set to ${newCategory}`)
+    console.log(`Category set to ${newCategory}`);
+    usePictures = newCategory=="pictures";
     pairsFound = 0;
     selected['a']="";
     selected['b']="";
@@ -59,6 +63,7 @@ const showModal = (gameOver=false, setCategory=false) => {
                 <div onclick="resetBoard('emotions')">Emotions</div>
                 <div onclick="resetBoard('clothes')">Clothes</div>
                 <div onclick="resetBoard('sports')">Sports</div>
+                <div onclick="resetBoard('pictures')">Pictures</div>
             </div>
             <div><button id="modal_button">Close</button></div>
         `
@@ -174,12 +179,21 @@ const populateBoard = () => {
     for(let i=0; i<4; i++){
         codeBlock+=`<div class="row">`;
         for(let j=0; j<4; j++){
-            codeBlock+=`<div class="card" id="${rows[i]+j}">
-                <div id="inner${rows[i]+j}" onclick="handleClick('${rows[i]+j}')" class="cardInner">
-                    <div id="front${rows[i]+j}" class="cardFront">🤔</div>
-                    <div id="back${rows[i]+j}" class="cardBack">${images[imageCount]}</div>
-                </div>
-            </div>`;
+            if(usePictures){
+                codeBlock+=`<div class="card" id="${rows[i]+j}">
+                    <div id="inner${rows[i]+j}" onclick="handleClick('${rows[i]+j}')" class="cardInner">
+                        <div id="front${rows[i]+j}" class="cardFront">🤔</div>
+                        <div id="back${rows[i]+j}" class="cardBack"><img src="media/${images[imageCount]}.png"/></div>
+                    </div>
+                </div>`;
+            }else{
+                codeBlock+=`<div class="card" id="${rows[i]+j}">
+                    <div id="inner${rows[i]+j}" onclick="handleClick('${rows[i]+j}')" class="cardInner">
+                        <div id="front${rows[i]+j}" class="cardFront">🤔</div>
+                        <div id="back${rows[i]+j}" class="cardBack">${images[imageCount]}</div>
+                    </div>
+                </div>`;
+            }
             imageCount++;
         };
         codeBlock+=`</div>`;
