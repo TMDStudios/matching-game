@@ -3,11 +3,12 @@ const food = ["🍞", "🧀", "🥨", "🥗", "🍔", "🍕", "🥪", "🌮", "�
 const emotions = ["🙂", "🙁", "🤪", "😳", "😠", "😥", "🫣", "🤨", "🙂", "🙁", "🤪", "😳", "😠", "😥", "🫣", "🤨"];
 const clothes = ["👕", "👖", "🧣", "🧤", "🧦", "👗", "👟", "👒", "👕", "👖", "🧣", "🧤", "🧦", "👗", "👟", "👒"];
 const sports = ["⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏓", "🏒", "⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏓", "🏒"];
+const numbers = ["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8"];
 
 const pictures = ["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8"];
 
-const categories = [fruits, food, emotions, clothes, sports];
-const categoryMap = {"fruits":fruits, "food":food, "emotions":emotions, "clothes":clothes, "sports":sports, "pictures":pictures};
+const categories = [fruits, food, emotions, clothes, sports, numbers];
+const categoryMap = {"fruits":fruits, "food":food, "emotions":emotions, "clothes":clothes, "sports":sports, "numbers":numbers, "pictures":pictures};
 
 const selected = {"a": "", "b": ""}; // Keep track of selected cards
 let pairsFound = 0;
@@ -16,11 +17,11 @@ let usePictures = false;
 
 // TODO
 
-// add congratulations animation
 // more categories
 // allow image uploads for custom games
 // replace timeouts with async?
-// have a numbers category
+// clean up settings
+// clean up help
 
 const resetBoard = newCategory => {
     category = categoryMap[newCategory];
@@ -50,6 +51,7 @@ const showModal = (gameOver=false, setCategory=false) => {
         });
 
         document.getElementById("modal").showModal();
+        handleConfetti();
     }
     if(setCategory){
         document.getElementById("modal").style.width = "60vw";
@@ -63,6 +65,7 @@ const showModal = (gameOver=false, setCategory=false) => {
                 <div onclick="resetBoard('emotions')">Emotions</div>
                 <div onclick="resetBoard('clothes')">Clothes</div>
                 <div onclick="resetBoard('sports')">Sports</div>
+                <div onclick="resetBoard('numbers')">Numbers</div>
                 <div onclick="resetBoard('pictures')">Pictures</div>
             </div>
             <div><button id="modal_button">Close</button></div>
@@ -207,5 +210,14 @@ const populateBoard = () => {
         element.style.lineHeight = `${cardHeight}`;
     });
 };
+
+const handleConfetti = _ => {
+    const rows = ["a", "b", "c", "d"];
+    for(let i=0; i<4; i++){
+        for(let j=0; j<4; j++){
+            document.getElementById(`front${rows[j]}${i}`).innerHTML = '<img src="media/fireworks.gif" alt="fireworks">';
+        }
+    }
+}
 
 populateBoard();

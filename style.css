@@ -119,8 +119,8 @@ h2 {
     line-height: 8vh;
 }
 .modal::backdrop {
-    background: linear-gradient(45deg, rgb(200, 18, 18), green);
-    opacity: .4;
+    background: linear-gradient(rgb(33,33,33), rgb(11,11,11));
+    opacity: .5;
 }
 .modal_btn {
     text-align: center;
