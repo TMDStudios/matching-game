@@ -7,12 +7,12 @@ const numbers = ["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8"
 
 const pictures = ["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8"];
 
-const categories = [fruits, food, emotions, clothes, sports, numbers];
+const categories = ["fruits", "food", "emotions", "clothes", "sports", "numbers"];
 const categoryMap = {"fruits":fruits, "food":food, "emotions":emotions, "clothes":clothes, "sports":sports, "numbers":numbers, "pictures":pictures};
 
 const selected = {"a": "", "b": ""}; // Keep track of selected cards
 let pairsFound = 0;
-let category = categories[Math.floor(Math.random()*categories.length)];
+let category = categoryMap[categories[Math.floor(Math.random()*categories.length)]];
 let usePictures = false;
 
 // TODO
@@ -24,6 +24,7 @@ let usePictures = false;
 // clean up help
 
 const resetBoard = newCategory => {
+    document.getElementById("title").innerHTML="<h3>Find all doubles</h3>";
     category = categoryMap[newCategory];
     console.log(`Category set to ${newCategory}`);
     usePictures = newCategory=="pictures";
@@ -34,11 +35,18 @@ const resetBoard = newCategory => {
     document.getElementById("modal").close();
 }
 
+const handleHelp = _ => {
+    if(confirm("**Debug Mode**\n\nFinish game?")){
+        showModal(true);
+    }
+}
+
 const showModal = (gameOver=false, setCategory=false) => {
     if(gameOver){
+        const nextCategory = categories[Math.floor(Math.random()*categories.length)];
         document.getElementById("modal").style.width = "33vw";
         document.getElementById("modal").style.maxHeight = "33vw";
-        document.getElementById("title").innerHTML=`<a href="https://match.up.railway.app/">Play Again</a>`;
+        document.getElementById("title").innerHTML=`<h3 class="playAgain" onclick="resetBoard('${nextCategory}')">Play Again</h3>`;
 
         document.getElementById("modal_content").innerHTML = `
         <h2>You did it!</h2>
@@ -47,11 +55,11 @@ const showModal = (gameOver=false, setCategory=false) => {
 
         document.getElementById("modal_button").addEventListener('click', () => {
             document.getElementById("modal").close();
-            window.location.replace("/");
+            resetBoard(nextCategory);
         });
 
-        document.getElementById("modal").showModal();
         handleConfetti();
+        document.getElementById("modal").showModal();
     }
     if(setCategory){
         document.getElementById("modal").style.width = "60vw";

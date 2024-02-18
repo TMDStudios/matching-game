@@ -24,13 +24,10 @@ h2 {
     line-height: 8vh;
     vertical-align: middle;
 }
-#title a {
-    text-decoration: none;
-    color: white;
-}
-#title a:hover {
+.playAgain:hover {
     text-decoration: underline;
     color: lightblue;
+    cursor: pointer;
 }
 #activity {
     background-color: rgba(255,255,255,0.1);
