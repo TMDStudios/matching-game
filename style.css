@@ -30,7 +30,7 @@ h2 {
     cursor: pointer;
 }
 #activity {
-    background-color: rgba(255,255,255,0.1);
+    /* background-color: rgba(255,255,255,0.1); */
     display: flex;
     flex-direction: column;
     border-radius: 8px;
@@ -59,6 +59,7 @@ h2 {
     position: relative;
     width: 100%;
     height: 100%;
+    border-radius: 8px;
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
@@ -103,6 +104,7 @@ h2 {
 }
 .card img {
     width: 100%;
+    border-radius: 8px;
 }
 
 /* MODAL */
@@ -114,6 +116,8 @@ h2 {
     max-height: 33vw;
     text-align: center;
     line-height: 8vh;
+    background-color: lightblue;
+    color: #172035;
 }
 .modal::backdrop {
     background: linear-gradient(rgb(33,33,33), rgb(11,11,11));
@@ -144,17 +148,17 @@ h2 {
 }
 #selectCategory div {
     border: 2px solid #243763;
-    color: #243763;
+    color: white;
     border-radius: 4px;
-    line-height: 36px;
+    line-height: 32px;
     vertical-align: center;
-    background-color: rgba(0,0,0,0.1);
+    background-color: #243763;
     width: 80%;
-    margin: 8px;
+    margin: 6px;
 }
 #selectCategory div:hover {
     cursor: pointer;
-    background-color: lightblue;
+    background-color: #172035;
 }
 #selectCategory button {
     width: 80%;

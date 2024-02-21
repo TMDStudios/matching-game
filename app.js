@@ -44,12 +44,16 @@ const handleHelp = _ => {
 const showModal = (gameOver=false, setCategory=false) => {
     if(gameOver){
         const nextCategory = categories[Math.floor(Math.random()*categories.length)];
-        document.getElementById("modal").style.width = "33vw";
-        document.getElementById("modal").style.maxHeight = "33vw";
+        if(window.screen.width>800){
+            document.getElementById("modal").style.width = "33vw";
+        }else{
+            document.getElementById("modal").style.width = "50vw";
+        }
+        document.getElementById("modal").style.maxHeight = "40vw";
         document.getElementById("title").innerHTML=`<h3 class="playAgain" onclick="resetBoard('${nextCategory}')">Play Again</h3>`;
 
         document.getElementById("modal_content").innerHTML = `
-        <h2>You did it!</h2>
+        <h3>You did it!</h3>
         <div><button id="modal_button">Play Again</button></div>
         `;
 
@@ -62,8 +66,12 @@ const showModal = (gameOver=false, setCategory=false) => {
         document.getElementById("modal").showModal();
     }
     if(setCategory){
-        document.getElementById("modal").style.width = "60vw";
-        document.getElementById("modal").style.maxHeight = "60vh";
+        if(window.screen.width>800){
+            document.getElementById("modal").style.width = "33vw";
+        }else{
+            document.getElementById("modal").style.width = "60vw";
+        }
+        document.getElementById("modal").style.maxHeight = "80vh";
 
         document.getElementById("modal_content").innerHTML = `
             <div><h3>Choose a category</h3></div>
@@ -217,6 +225,14 @@ const populateBoard = () => {
     allCards.forEach(element => {
         element.style.lineHeight = `${cardHeight}`;
     });
+
+    if(usePictures){
+        const allInnerCards = document.querySelectorAll('.cardBack');
+        allInnerCards.forEach(element => {
+            element.style.display = "flex";
+            element.style.alignItems = "center";
+        });
+    }
 };
 
 const handleConfetti = _ => {
