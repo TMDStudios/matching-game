@@ -6,28 +6,61 @@ const sports = ["⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏓", "�
 const numbers = ["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8"];
 
 const pictures = ["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8"];
+let customPicturesArray = [];
+const customPictures = {};
 
 const categories = ["fruits", "food", "emotions", "clothes", "sports", "numbers"];
-const categoryMap = {"fruits":fruits, "food":food, "emotions":emotions, "clothes":clothes, "sports":sports, "numbers":numbers, "pictures":pictures};
+const categoryMap = {"fruits":fruits, "food":food, "emotions":emotions, "clothes":clothes, "sports":sports, "numbers":numbers, "pictures":pictures, "customPictures":pictures};
 
 const selected = {"a": "", "b": ""}; // Keep track of selected cards
 let pairsFound = 0;
 let category = categoryMap[categories[Math.floor(Math.random()*categories.length)]];
 let usePictures = false;
+let useCustomPictures = false;
 
 // TODO
 
 // more categories
-// allow image uploads for custom games
 // replace timeouts with async?
 // clean up settings
 // clean up help
+
+// document.getElementById('imageForm').addEventListener('submit', function(e) {
+//     e.preventDefault();
+//     customPictures = document.getElementById('customImages').value.trim().split(",");
+//     // use pictures ask keys, links as values
+//     console.log('CustomImages:', customPictures);
+// });
+
+const addCustomImages = _ => {
+    let fileInput = document.getElementById('fileInput');
+    let files = fileInput.files;
+
+    if(files.length==8){
+        for(let i=0; i<files.length; i++){
+            let reader = new FileReader();
+            reader.onload = function(e){
+                customPicturesArray.push(e.target.result);
+            };
+            reader.readAsDataURL(files[i]);
+        }
+    }else{
+        alert("Please select 8 images");
+    }
+}
+
+const organizeCustomPictures = _ => {
+    for(let i=1; i<17; i++){
+        i<9 ? customPictures[i.toString()] = customPicturesArray[i-1] : customPictures[i.toString()] = customPicturesArray[i-9];
+    }
+}
 
 const resetBoard = newCategory => {
     document.getElementById("title").innerHTML="<h3>Find all doubles</h3>";
     category = categoryMap[newCategory];
     console.log(`Category set to ${newCategory}`);
     usePictures = newCategory=="pictures";
+    useCustomPictures = newCategory=="customPictures";
     pairsFound = 0;
     selected['a']="";
     selected['b']="";
@@ -83,6 +116,7 @@ const showModal = (gameOver=false, setCategory=false) => {
                 <div onclick="resetBoard('sports')">Sports</div>
                 <div onclick="resetBoard('numbers')">Numbers</div>
                 <div onclick="resetBoard('pictures')">Pictures</div>
+                <div onclick="resetBoard('customPictures')">My Pictures</div>
             </div>
             <div><button id="modal_button">Close</button></div>
         `
@@ -195,16 +229,28 @@ const populateBoard = () => {
     let imageCount = 0;
     const rows = ["a", "b", "c", "d"];
     let codeBlock = "";
+    if(useCustomPictures){
+        organizeCustomPictures();
+    }
     for(let i=0; i<4; i++){
         codeBlock+=`<div class="row">`;
         for(let j=0; j<4; j++){
-            if(usePictures){
-                codeBlock+=`<div class="card" id="${rows[i]+j}">
-                    <div id="inner${rows[i]+j}" onclick="handleClick('${rows[i]+j}')" class="cardInner">
-                        <div id="front${rows[i]+j}" class="cardFront">🤔</div>
-                        <div id="back${rows[i]+j}" class="cardBack"><img src="media/${images[imageCount]}.png"/></div>
-                    </div>
-                </div>`;
+            if(usePictures||useCustomPictures){
+                if(useCustomPictures){
+                    codeBlock+=`<div class="card" id="${rows[i]+j}">
+                        <div id="inner${rows[i]+j}" onclick="handleClick('${rows[i]+j}')" class="cardInner">
+                            <div id="front${rows[i]+j}" class="cardFront">🤔</div>
+                            <div id="back${rows[i]+j}" class="cardBack"><img src="${customPictures[pictures[imageCount]]}"/></div>
+                        </div>
+                    </div>`;
+                }else{
+                    codeBlock+=`<div class="card" id="${rows[i]+j}">
+                        <div id="inner${rows[i]+j}" onclick="handleClick('${rows[i]+j}')" class="cardInner">
+                            <div id="front${rows[i]+j}" class="cardFront">🤔</div>
+                            <div id="back${rows[i]+j}" class="cardBack"><img src="media/${images[imageCount]}.png"/></div>
+                        </div>
+                    </div>`;
+                }
             }else{
                 codeBlock+=`<div class="card" id="${rows[i]+j}">
                     <div id="inner${rows[i]+j}" onclick="handleClick('${rows[i]+j}')" class="cardInner">
@@ -239,7 +285,7 @@ const handleConfetti = _ => {
     const rows = ["a", "b", "c", "d"];
     for(let i=0; i<4; i++){
         for(let j=0; j<4; j++){
-            document.getElementById(`front${rows[j]}${i}`).innerHTML = '<img src="media/fireworks.gif" alt="fireworks">';
+            document.getElementById(`back${rows[j]}${i}`).innerHTML = '<img src="media/fireworks.gif" alt="fireworks">';
         }
     }
 }
