@@ -69,12 +69,10 @@ const resetBoard = newCategory => {
 }
 
 const handleHelp = _ => {
-    if(confirm("**Debug Mode**\n\nFinish game?")){
-        showModal(true);
-    }
+    showModal(false, false, true);
 }
 
-const showModal = (gameOver=false, setCategory=false) => {
+const showModal = (gameOver=false, setCategory=false, help=false) => {
     if(gameOver){
         const nextCategory = categories[Math.floor(Math.random()*categories.length)];
         if(window.screen.width>800){
@@ -117,6 +115,25 @@ const showModal = (gameOver=false, setCategory=false) => {
                 <div onclick="resetBoard('numbers')">Numbers</div>
                 <div onclick="resetBoard('pictures')">Pictures</div>
                 <div onclick="resetBoard('customPictures')">My Pictures</div>
+            </div>
+            <div><button id="modal_button">Close</button></div>
+        `
+
+        document.getElementById("modal_button").addEventListener('click', () => {
+            document.getElementById("modal").close();
+        });
+
+        document.getElementById("modal").showModal();
+    }
+    if(help){
+        document.getElementById("modal").style.maxHeight = "25vh";
+        document.getElementById("modal_content").innerHTML = `
+            <div><h3>Using Custom Images</h3></div>
+            <div class='help'">
+                <p>
+                    In order us use cusom images, be sure to select 8 images from your device (square images work best) 
+                    and select the correct category under settings.
+                </p>
             </div>
             <div><button id="modal_button">Close</button></div>
         `
