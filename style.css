@@ -105,8 +105,8 @@ h2 {
     transform: rotateY(0deg);
 }
 .card img {
-    width: 100%;
-    height: auto;
+    width: auto;
+    height: 100%;
     object-fit: cover;
     border-radius: 8px;
 }
@@ -177,6 +177,11 @@ h2 {
 }
 .modal h3 {
     padding: 2rem;
+}
+.customImgModal {
+    padding-top: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 @media all and (max-width: 600px) {

@@ -23,24 +23,38 @@ let useCustomPictures = false;
 // more categories
 // replace timeouts with async?
 // clean up settings
-// clean up help
 
-// document.getElementById('imageForm').addEventListener('submit', function(e) {
-//     e.preventDefault();
-//     customPictures = document.getElementById('customImages').value.trim().split(",");
-//     // use pictures ask keys, links as values
-//     console.log('CustomImages:', customPictures);
-// });
+const customGame = _ => {
+    if(window.screen.width>800){
+        document.getElementById("modal").style.width = "33vw";
+    }else{
+        document.getElementById("modal").style.width = "80vw";
+    }
+
+    document.getElementById("modal_content").innerHTML = `
+        <div class='customImgModal'">
+            <p>Please select eight images from your device.</p>
+            <input type="file" id="fileInput" multiple>
+        </div>
+        <div><button onclick="addCustomImages()">Replace Images</button></div>
+    `;
+
+    document.getElementById("modal").showModal()
+}
 
 const addCustomImages = _ => {
     let fileInput = document.getElementById('fileInput');
     let files = fileInput.files;
+    customPicturesArray = [];
 
     if(files.length==8){
         for(let i=0; i<files.length; i++){
             let reader = new FileReader();
             reader.onload = function(e){
                 customPicturesArray.push(e.target.result);
+                if(i==7){
+                    resetBoard("customPictures");
+                }
             };
             reader.readAsDataURL(files[i]);
         }
@@ -114,7 +128,7 @@ const showModal = (gameOver=false, setCategory=false, help=false) => {
                 <div onclick="resetBoard('sports')">Sports</div>
                 <div onclick="resetBoard('numbers')">Numbers</div>
                 <div onclick="resetBoard('pictures')">Pictures</div>
-                <div onclick="resetBoard('customPictures')">My Pictures</div>
+                <div onclick="customGame()">My Pictures</div>
             </div>
             <div><button id="modal_button">Close</button></div>
         `
@@ -126,7 +140,12 @@ const showModal = (gameOver=false, setCategory=false, help=false) => {
         document.getElementById("modal").showModal();
     }
     if(help){
-        document.getElementById("modal").style.maxHeight = "25vh";
+        if(window.screen.width>800){
+            document.getElementById("modal").style.width = "33vw";
+        }else{
+            document.getElementById("modal").style.width = "80vw";
+        }
+        document.getElementById("modal").style.maxHeight = "80vh";
         document.getElementById("modal_content").innerHTML = `
             <div><h3>Using Custom Images</h3></div>
             <div class='help'">
