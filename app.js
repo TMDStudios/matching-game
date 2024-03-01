@@ -9,7 +9,7 @@ const pictures = ["1","2","3","4","5","6","7","8","1","2","3","4","5","6","7","8
 let customPicturesArray = [];
 const customPictures = {};
 
-const categories = ["fruits", "food", "emotions", "clothes", "sports", "numbers"];
+const categories = ["fruits", "food", "emotions", "clothes", "sports"];
 const categoryMap = {"fruits":fruits, "food":food, "emotions":emotions, "clothes":clothes, "sports":sports, "numbers":numbers, "pictures":pictures, "customPictures":pictures};
 
 const selected = {"a": "", "b": ""}; // Keep track of selected cards
@@ -23,6 +23,8 @@ let useCustomPictures = false;
 // more categories
 // replace timeouts with async?
 // clean up settings
+// add readme section about privacy (pictures never leave your device)
+// add pictures to default, remove numbers?
 
 const customGame = _ => {
     if(window.screen.width>800){
@@ -42,25 +44,66 @@ const customGame = _ => {
     document.getElementById("modal").showModal()
 }
 
-const addCustomImages = _ => {
-    let fileInput = document.getElementById('fileInput');
-    let files = fileInput.files;
-    customPicturesArray = [];
-
-    if(files.length==8){
-        for(let i=0; i<files.length; i++){
-            let reader = new FileReader();
-            reader.onload = function(e){
-                customPicturesArray.push(e.target.result);
-                if(i==7){
-                    resetBoard("customPictures");
-                }
-            };
-            reader.readAsDataURL(files[i]);
-        }
+const verifyImages = _ => {
+    if(window.screen.width>800){
+        document.getElementById("modal").style.width = "50vw";
     }else{
-        alert("Please select 8 images");
+        document.getElementById("modal").style.width = "80vw";
     }
+
+    let imageDisplay = ``;
+
+    for(let i=0; i<8; i++){
+        imageDisplay+=`<img src="${customPicturesArray[i]}"/>`
+    }
+
+    document.getElementById("modal_content").innerHTML = `
+        <div class='customImgModal'">
+            <div class='imagePreview'>
+                ${imageDisplay}
+            </div>
+        </div>
+        <div>
+            <button id="modal_button">Cancel</button>
+            <button onclick="resetBoard('customPictures')">Confirm</button>
+        </div>
+    `
+    
+    document.getElementById("modal_button").addEventListener('click', () => {
+        document.getElementById("modal").close();
+    });
+
+    document.getElementById("modal").showModal();
+}
+
+const addCustomImages = async _ => {
+    await(processImages());
+    verifyImages();
+}
+
+const processImages = _ => {
+    return new Promise((resolve, reject) => {
+        let fileInput = document.getElementById('fileInput');
+        let files = fileInput.files;
+        customPicturesArray = [];
+
+        if(files.length==8){
+            let loadedCount = 0;
+            for(let i=0; i<files.length; i++){
+                let reader = new FileReader();
+                reader.onload = function(e){
+                    customPicturesArray.push(e.target.result);
+                    loadedCount++;
+                    if (loadedCount === files.length) {
+                        resolve();
+                    }
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        }else{
+            alert("Please select 8 images");
+        }
+    });
 }
 
 const organizeCustomPictures = _ => {
@@ -150,8 +193,15 @@ const showModal = (gameOver=false, setCategory=false, help=false) => {
             <div><h3>Using Custom Images</h3></div>
             <div class='help'">
                 <p>
-                    In order us use cusom images, be sure to select 8 images from your device (square images work best) 
-                    and select the correct category under settings.
+                    In order us use cusom images, go to settings and select 'My Pictures'. Select 8 images from your device (square images work best) 
+                    and select 'Replace Images'. If the images on the preview screen are correct, select 'Confirm' to start a game with your custom images.
+                </p>
+                <p> - - - </p>
+                <p>
+                    NOTE: The images will never leave your device. They are only visible to you. 
+                </p>
+                <p>
+                    To read more, click <a class='gitHubLink' href="https://github.com/TMDStudios/matching-game">here</a>
                 </p>
             </div>
             <div><button id="modal_button">Close</button></div>
