@@ -23,8 +23,8 @@ let useCustomPictures = false;
 // more categories
 // replace timeouts with async?
 // clean up settings
-// add readme section about privacy (pictures never leave your device)
 // add pictures to default, remove numbers?
+// if customPicturesArray is not empty, ask user if they want to reuse same pictures or select new ones
 
 const customGame = _ => {
     if(window.screen.width>800){
@@ -171,7 +171,7 @@ const showModal = (gameOver=false, setCategory=false, help=false) => {
                 <div onclick="resetBoard('sports')">Sports</div>
                 <div onclick="resetBoard('numbers')">Numbers</div>
                 <div onclick="resetBoard('pictures')">Pictures</div>
-                <div onclick="customGame()">My Pictures</div>
+                <div onclick="customGame()"> * My Pictures * </div>
             </div>
             <div><button id="modal_button">Close</button></div>
         `
@@ -201,7 +201,7 @@ const showModal = (gameOver=false, setCategory=false, help=false) => {
                     NOTE: The images will never leave your device. They are only visible to you. 
                 </p>
                 <p>
-                    To read more, click <a class='gitHubLink' href="https://github.com/TMDStudios/matching-game">here</a>
+                    To read more, click <a class='gitHubLink' href="https://github.com/TMDStudios/matching-game" target="_blank">here.</a>
                 </p>
             </div>
             <div><button id="modal_button">Close</button></div>

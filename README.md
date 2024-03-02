@@ -4,6 +4,8 @@
 
 Matching Game for kids.
 
+>Privacy Note: The ability to use custom images is completely optional and is in no way tracked which can be verified in the source code. The images never leave the client device and can only be seen locally.
+
 >You can see the website here: https://match.up.railway.app
 
 ## You may also like...

@@ -194,12 +194,12 @@ h2 {
     padding: 1rem;
 }
 .gitHubLink {
-    text-decoration: none;
+    text-decoration: underline;
     color: rgb(33,33,33);
     border: none;
 }
 .gitHubLink:hover {
-    color: darkblue;
+    color: orangered;
 }
 
 @media all and (max-width: 600px) {
