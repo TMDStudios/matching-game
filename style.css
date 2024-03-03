@@ -190,6 +190,21 @@ h2 {
     padding-top: 2rem;
     padding-left: 1rem;
     padding-right: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.customImgModal input {
+    margin: 1rem;
+    width: 80%;
+}
+.customImgModalButtons {
+    margin: auto;
+    width: 80%;
+    display: flex;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 .imagePreview {
     display: flex;

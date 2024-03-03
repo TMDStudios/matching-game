@@ -37,7 +37,7 @@ const customGame = async _ => {
         verifyImages();
     }else{
         document.getElementById("modal_content").innerHTML = `
-            <div class='customImgModal'">
+            <div class='customImgModal'>
                 <p>Please select eight images from your device.</p>
                 <input type="file" id="fileInput" multiple>
             </div>
@@ -62,12 +62,12 @@ const verifyImages = _ => {
     }
 
     document.getElementById("modal_content").innerHTML = `
-        <div class='customImgModal'">
+        <div class='customImgModal'>
             <div class='imagePreview'>
                 ${imageDisplay}
             </div>
         </div>
-        <div>
+        <div class='customImgModalButtons'>
             <button id="modal_button">Cancel</button>
             <button onclick="resetBoard('customPictures')">Confirm</button>
         </div>
@@ -82,12 +82,12 @@ const verifyImages = _ => {
 
 const useSameCustomImages = _ => {
     return new Promise((resolve, reject) => {
-        if(customPicturesArray.length==8){
+        if(sessionStorage.getItem('customPicturesArray')){
             document.getElementById("modal_content").innerHTML = `
-                <div class='customImgModal'">
+                <div class='customImgModal'>
                     <p>Would you like to use the same images as last time?</p>
                 </div>
-                <div><button id="btnNo">No</button> <button id="btnYes">Yes</button></div>
+                <div class='customImgModalButtons'><button id="btnNo">No</button> <button id="btnYes">Yes</button></div>
             `;
 
             document.getElementById("btnNo").addEventListener('click', () => {
@@ -95,6 +95,7 @@ const useSameCustomImages = _ => {
             });
 
             document.getElementById("btnYes").addEventListener('click', () => {
+                customPicturesArray = JSON.parse(sessionStorage.getItem('customPicturesArray'));
                 return resolve(true);
             });
 
@@ -182,6 +183,7 @@ const processImages = _ => {
                         loadedCount++;
                         if (loadedCount === files.length) {
                             console.log(`Arr size is ${sizeof(customPicturesArray)}`);
+                            sessionStorage.setItem('customPicturesArray', JSON.stringify(customPicturesArray));
                             resolve();
                         }
                     };
