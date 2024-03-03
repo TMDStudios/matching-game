@@ -77,6 +77,10 @@ h2 {
     backface-visibility: hidden;
     transition: transform 0.8s;
     transform-style: preserve-3d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 .cardFrontFlipped, .cardBackFlipped {
     border-radius: 8px;
@@ -86,6 +90,10 @@ h2 {
     overflow: hidden;
     -webkit-backface-visibility: hidden; /* Safari */
     backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 .cardFront {
     background-color: snow;

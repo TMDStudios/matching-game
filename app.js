@@ -81,26 +81,86 @@ const addCustomImages = async _ => {
     verifyImages();
 }
 
+function sizeof(obj) {
+    let bytes = 0;
+
+    function sizeOf(obj) {
+        if (obj !== null && obj !== undefined) {
+            switch (typeof obj) {
+                case 'number':
+                    bytes += 8;
+                    break;
+                case 'string':
+                    bytes += obj.length * 2;
+                    break;
+                case 'boolean':
+                    bytes += 4;
+                    break;
+                case 'object':
+                    const objClass = Object.prototype.toString.call(obj).slice(8, -1);
+                    if (objClass === 'Object' || objClass === 'Array') {
+                        for (let key in obj) {
+                            if (!obj.hasOwnProperty(key)) continue;
+                            sizeOf(obj[key]);
+                        }
+                    } else bytes += obj.toString().length * 2;
+                    break;
+            }
+        }
+        return bytes;
+    }
+
+    function formatByteSize(bytes) {
+        if (bytes < 1024) return bytes + ' bytes';
+        else if (bytes < 1048576) return (bytes / 1024).toFixed(3) + ' KB';
+        else if (bytes < 1073741824) return (bytes / 1048576).toFixed(3) + ' MB';
+        else return (bytes / 1073741824).toFixed(3) + ' GB';
+    }
+
+    return formatByteSize(sizeOf(obj));
+}
+
 const processImages = _ => {
     return new Promise((resolve, reject) => {
         let fileInput = document.getElementById('fileInput');
         let files = fileInput.files;
         customPicturesArray = [];
 
-        if(files.length==8){
+        const cardElement = document.querySelector('.cardBack');
+        const cardHeight = cardElement.clientHeight;
+        const cardWidth = cardElement.clientWidth;
+
+        if (files.length == 8) {
             let loadedCount = 0;
-            for(let i=0; i<files.length; i++){
+            for (let i = 0; i < files.length; i++) {
                 let reader = new FileReader();
-                reader.onload = function(e){
-                    customPicturesArray.push(e.target.result);
-                    loadedCount++;
-                    if (loadedCount === files.length) {
-                        resolve();
-                    }
+                reader.onload = function (e) {
+                    let img = new Image();
+                    img.onload = function () {
+                        let imgSizeDiff = cardHeight/img.height;
+                        let canvas = document.createElement('canvas');
+                        let ctx = canvas.getContext('2d');
+                        if(img.width>img.height){
+                            canvas.width = Math.floor(img.width*imgSizeDiff);
+                            canvas.height = cardHeight;
+                        }else{
+                            imgSizeDiff = cardWidth/img.width;
+                            canvas.width = cardWidth;
+                            canvas.height = Math.floor(img.height*imgSizeDiff);
+                        }
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        customPicturesArray.push(canvas.toDataURL());
+                        loadedCount++;
+                        if (loadedCount === files.length) {
+                            console.log(`Arr size is ${sizeof(customPicturesArray)}`);
+                            resolve();
+                        }
+                    };
+                    img.src = e.target.result;
                 };
                 reader.readAsDataURL(files[i]);
             }
-        }else{
+        } else {
             alert("Please select 8 images");
         }
     });
