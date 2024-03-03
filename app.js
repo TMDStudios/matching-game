@@ -24,24 +24,28 @@ let useCustomPictures = false;
 // replace timeouts with async?
 // clean up settings
 // add pictures to default, remove numbers?
-// if customPicturesArray is not empty, ask user if they want to reuse same pictures or select new ones
 
-const customGame = _ => {
+const customGame = async _ => {
     if(window.screen.width>800){
         document.getElementById("modal").style.width = "33vw";
     }else{
         document.getElementById("modal").style.width = "80vw";
     }
 
-    document.getElementById("modal_content").innerHTML = `
-        <div class='customImgModal'">
-            <p>Please select eight images from your device.</p>
-            <input type="file" id="fileInput" multiple>
-        </div>
-        <div><button onclick="addCustomImages()">Replace Images</button></div>
-    `;
+    if(await useSameCustomImages()){
+        
+        verifyImages();
+    }else{
+        document.getElementById("modal_content").innerHTML = `
+            <div class='customImgModal'">
+                <p>Please select eight images from your device.</p>
+                <input type="file" id="fileInput" multiple>
+            </div>
+            <div><button onclick="addCustomImages()">Replace Images</button></div>
+        `;
 
-    document.getElementById("modal").showModal()
+        document.getElementById("modal").showModal();
+    }
 }
 
 const verifyImages = _ => {
@@ -74,6 +78,31 @@ const verifyImages = _ => {
     });
 
     document.getElementById("modal").showModal();
+}
+
+const useSameCustomImages = _ => {
+    return new Promise((resolve, reject) => {
+        if(customPicturesArray.length==8){
+            document.getElementById("modal_content").innerHTML = `
+                <div class='customImgModal'">
+                    <p>Would you like to use the same images as last time?</p>
+                </div>
+                <div><button id="btnNo">No</button> <button id="btnYes">Yes</button></div>
+            `;
+
+            document.getElementById("btnNo").addEventListener('click', () => {
+                return resolve(false);
+            });
+
+            document.getElementById("btnYes").addEventListener('click', () => {
+                return resolve(true);
+            });
+
+            document.getElementById("modal").showModal()
+        }else{
+            return resolve(false);
+        }
+    })
 }
 
 const addCustomImages = async _ => {
